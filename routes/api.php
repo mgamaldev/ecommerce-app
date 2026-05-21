@@ -29,6 +29,15 @@ Route::resource('variant', VariantController::class);
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('checkout', CheckOutController::class)->only('store');
 });
+
+// Stripe------------------------------------
+Route::get('/checkout/success', function () {
+    return 'Payment Success';
+})->name('checkout.success');
+
+Route::get('/checkout/cancel', function () {
+    return 'Payment Cancelled';
+})->name('checkout.cancel');
 Route::resource('cart', CartController::class)->only('index');
 
 // Admin Panel Api ------------------------------------

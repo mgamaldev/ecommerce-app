@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Interfaces\PaymentGatewayInterface;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
@@ -10,21 +11,16 @@ use App\Models\Variant;
 use App\Observers\BaseObserver;
 use App\Observers\OrderObserver;
 use App\Observers\UserObserver;
+use App\Services\Gateways\StripeService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
+    public function register()
     {
-        //
+        $this->app->bind(PaymentGatewayInterface::class, StripeService::class);
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         Category::observe(BaseObserver::class);

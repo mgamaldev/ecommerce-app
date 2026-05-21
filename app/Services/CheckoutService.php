@@ -2,17 +2,16 @@
 
 namespace App\Services;
 
-use App\Exceptions\NotEnoughBalanceException;
 use App\Http\Requests\CartItemRequest;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Variant;
-use App\Models\Wallet;
+use App\Services\Gateways\StripeService;
 use Illuminate\Support\Facades\DB;
 
 class CheckoutService
 {
-    public function __construct(public CartItemService $cartItemService) {}
+    public function __construct(public CartItemService $cartItemService, public StripeService $stripe) {}
 
     public function checkout(CartItemRequest $request)
     {
@@ -21,20 +20,11 @@ class CheckoutService
 
         return DB::transaction(function () use ($user, $cartItem) {
 
-            $wallet = Wallet::where('user_id', $user->id)->lockForUpdate()->first();
-
             $product = Product::with('variants')->lockForUpdate()->first();
 
             $variant = Variant::where('product_id', $product->id)->first();
 
             $totalPrice = $cartItem->quantity * $product->base_price;
-
-            if ($wallet?->balance < $totalPrice) {
-                throw new NotEnoughBalanceException;
-            }
-            $wallet->decrement('balance', $totalPrice);
-            $product->decrement('stock', $cartItem->quantity);
-            $variant->decrement('variant_stock', $cartItem->quantity);
 
             $order = Order::create([
                 'user_id' => $user->id,
@@ -43,7 +33,7 @@ class CheckoutService
                 'status' => 'pending',
             ]);
 
-            return $order;
+            return $this->stripe->checkout($order);
         });
     }
 }
