@@ -35,7 +35,7 @@ class HandleStripeWebhook
 
             $variant?->decrement('variant_stock', $order->quantity);
 
-            $order->update(['status' => 'paid']);
+            $order->update(['payment_status' => 'paid']);
 
             event(new OrderPlaced($order));
         });
