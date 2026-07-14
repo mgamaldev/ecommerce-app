@@ -2,16 +2,17 @@
 
 namespace App\Services;
 
+use App\Events\OrderPlaced;
 use App\Http\Requests\CartItemRequest;
+use App\Interfaces\PaymentGatewayInterface;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Variant;
-use App\Services\Gateways\StripeService;
 use Illuminate\Support\Facades\DB;
 
 class CheckoutService
 {
-    public function __construct(public CartItemService $cartItemService, public StripeService $stripe) {}
+    public function __construct(public CartItemService $cartItemService, public PaymentGatewayInterface $paymentGateway) {}
 
     public function checkout(CartItemRequest $request)
     {
@@ -33,7 +34,9 @@ class CheckoutService
                 'status' => 'pending',
             ]);
 
-            return $this->stripe->checkout($order);
+            event(new OrderPlaced($order));
+
+            return $this->paymentGateway->checkout($order);
         });
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Interfaces\PaymentGatewayInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Support\ApiBaseTest;
 
@@ -30,6 +31,14 @@ class OrderTest extends ApiBaseTest
         $cartItem = \App\Models\CartItem::factory()->create([
             'cart_id' => $cart->id]);
 
+        $this->mock(PaymentGatewayInterface::class, function ($mock) {
+            $mock->shouldReceive('checkout')
+                ->once()
+                ->andReturn([
+                    'url' => 'https://checkout.test',
+                    'session_id' => 'cs_test_123',
+                ]);
+        });
         $response = $this->actingAs($user, 'sanctum')
             ->postJson('api/checkout', [
                 'variant_id' => $variant->id,

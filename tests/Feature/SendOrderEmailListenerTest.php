@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Events\OrderPlaced;
+use App\Interfaces\PaymentGatewayInterface;
 use App\Listeners\SendOrderEmailListener;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Support\ApiBaseTest;
@@ -27,6 +28,14 @@ class SendOrderEmailListenerTest extends ApiBaseTest
             'total_amount' => 100,
             'status' => 'pending',
         ]);
+        $this->mock(PaymentGatewayInterface::class, function ($mock) {
+            $mock->shouldReceive('checkout')
+                ->once()
+                ->andReturn([
+                    'url' => 'https://checkout.test',
+                    'session_id' => 'cs_test_123',
+                ]);
+        });
         $response = $this->actingAs($user, 'sanctum')
             ->postJson('api/checkout', [
                 'variant_id' => $variant->id,

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Events\OrderPlaced;
+use App\Interfaces\PaymentGatewayInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\Support\ApiBaseTest;
@@ -23,6 +24,14 @@ class OrderEventTest extends ApiBaseTest
 
         $variant = \App\Models\Variant::factory()->create();
 
+        $this->mock(PaymentGatewayInterface::class, function ($mock) {
+            $mock->shouldReceive('checkout')
+                ->once()
+                ->andReturn([
+                    'url' => 'https://checkout.test',
+                    'session_id' => 'cs_test_123',
+                ]);
+        });
         $response = $this->actingAs($user, 'sanctum')
             ->postJson('api/checkout', [
                 'variant_id' => $variant->id,
