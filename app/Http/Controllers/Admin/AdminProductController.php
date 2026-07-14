@@ -17,7 +17,7 @@ class AdminProductController extends ApiController
     {
         $this->authorize('viewAny', Product::class);
 
-        $products = $this->productService->getAllProducts();
+        $products = $this->productService->getAll();
 
         return $this->success(ProductResource::collection($products), 'All products');
     }
@@ -26,7 +26,7 @@ class AdminProductController extends ApiController
     {
         $this->authorize('view', $product);
 
-        $product = $this->productService->getProductDetails($product->id);
+        $product = $this->productService->getDetails($product->id);
 
         return $this->success(new ProductResource($product), 'Product details');
     }
@@ -35,7 +35,7 @@ class AdminProductController extends ApiController
     {
         $this->authorize('update', $product);
 
-        $product = $this->productService->updateProduct($product->id, $request->validated());
+        $product = $this->productService->update($product->id, $request->validated());
 
         return $this->success(new ProductResource($product), 'Product updated successfully');
     }
@@ -44,7 +44,7 @@ class AdminProductController extends ApiController
     {
         $this->authorize('create', Product::class);
 
-        $product = $this->productService->addProduct($request->validated());
+        $product = $this->productService->create($request->validated());
 
         return $this->success(new ProductResource($product), 'Product added successfully');
     }
@@ -53,7 +53,7 @@ class AdminProductController extends ApiController
     {
         $this->authorize('delete', $product);
 
-        $product = $this->productService->softDeleteProduct($product->id);
+        $product = $this->productService->softDelete($product->id);
 
         return $this->success(new ProductResource($product), 'Product deleted successfully');
     }
@@ -64,7 +64,7 @@ class AdminProductController extends ApiController
 
         $this->authorize('forceDelete', $product);
 
-        $this->productService->deleteProduct($id);
+        $this->productService->forceDelete($id);
 
         return $this->success(new ProductResource($product), 'Product permanently deleted');
     }
@@ -75,7 +75,7 @@ class AdminProductController extends ApiController
 
         $this->authorize('restore', $product);
 
-        $product = $this->productService->restoreProduct($id);
+        $product = $this->productService->restore($id);
 
         return $this->success(new ProductResource($product), 'Product restored successfully');
     }

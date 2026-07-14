@@ -17,7 +17,7 @@ class AdminVariantController extends ApiController
     {
         $this->authorize('viewAny', Variant::class);
 
-        $variants = $this->variantService->getAllVariants();
+        $variants = $this->variantService->getAll();
 
         return $this->success(VariantResource::collection($variants), 'All variants');
     }
@@ -26,7 +26,7 @@ class AdminVariantController extends ApiController
     {
         $this->authorize('view', $variant);
 
-        $variant = $this->variantService->getVariantDetails($variant->id);
+        $variant = $this->variantService->getDetails($variant->id);
 
         return $this->success(new VariantResource($variant), 'Variant details');
     }
@@ -35,7 +35,7 @@ class AdminVariantController extends ApiController
     {
         $this->authorize('update', $variant);
 
-        $variant = $this->variantService->updateVariant($variant->id, $request->validated());
+        $variant = $this->variantService->update($variant->id, $request->validated());
 
         return $this->success(new VariantResource($variant), 'variant updated successfully');
     }
@@ -44,7 +44,7 @@ class AdminVariantController extends ApiController
     {
         $this->authorize('create', Variant::class);
 
-        $addVariant = $this->variantService->addVariant($request->validated());
+        $addVariant = $this->variantService->create($request->validated());
 
         return $this->success(new VariantResource($addVariant), 'Variant added successfully');
     }
@@ -53,7 +53,7 @@ class AdminVariantController extends ApiController
     {
         $this->authorize('delete', $variant);
 
-        $variant = $this->variantService->softDeleteVariant($variant->id);
+        $variant = $this->variantService->softDelete($variant->id);
 
         return $this->success(new VariantResource($variant), 'variant deleted successfully');
     }
@@ -64,7 +64,7 @@ class AdminVariantController extends ApiController
 
         $this->authorize('forceDelete', $variant);
 
-        $this->variantService->deleteVariant($id);
+        $this->variantService->forceDelete($id);
 
         return $this->success(new VariantResource($variant), 'Variant permanently deleted');
     }
@@ -75,7 +75,7 @@ class AdminVariantController extends ApiController
 
         $this->authorize('restore', $variant);
 
-        $variant = $this->variantService->restoreVariant($id);
+        $variant = $this->variantService->restore($id);
 
         return $this->success(new VariantResource($variant), 'Variant restored successfully');
     }

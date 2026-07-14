@@ -17,7 +17,7 @@ class AdminCategoryController extends ApiController
     {
         $this->authorize('viewAny', Category::class);
 
-        $categories = $this->categoryService->getAllCategories();
+        $categories = $this->categoryService->getAll();
 
         return $this->success(CategoryResource::collection($categories), 'All categories');
     }
@@ -26,7 +26,7 @@ class AdminCategoryController extends ApiController
     {
         $this->authorize('view', $category);
 
-        $category = $this->categoryService->getCategoryDetails($category->id);
+        $category = $this->categoryService->getDetails($category->id);
 
         return $this->success(new CategoryResource($category), 'Category details');
     }
@@ -35,7 +35,7 @@ class AdminCategoryController extends ApiController
     {
         $this->authorize('update', $category);
 
-        $category = $this->categoryService->updateCategory($category->id, $request->validated());
+        $category = $this->categoryService->update($category->id, $request->validated());
 
         return $this->success(new CategoryResource($category), 'Category updated successfully');
     }
@@ -44,7 +44,7 @@ class AdminCategoryController extends ApiController
     {
         $this->authorize('create', Category::class);
 
-        $addCategory = $this->categoryService->addCategory($request->validated());
+        $addCategory = $this->categoryService->create($request->validated());
 
         return $this->success(new CategoryResource($addCategory), 'Category added successfully');
     }
@@ -53,7 +53,7 @@ class AdminCategoryController extends ApiController
     {
         $this->authorize('delete', $category);
 
-        $category = $this->categoryService->softDeleteCategory($category->id);
+        $category = $this->categoryService->softDelete($category->id);
 
         return $this->success(new CategoryResource($category), 'Category deleted successfully');
     }
@@ -64,9 +64,9 @@ class AdminCategoryController extends ApiController
 
         $this->authorize('forceDelete', $category);
 
-        $this->categoryService->deleteCategory($id);
+        $this->categoryService->forceDelete($id);
 
-        return $this->success(new CategoryResource($category), 'Category permanently deleted');
+        return $this->success('Category permanently deleted');
     }
 
     public function restore(int $id)
@@ -75,7 +75,7 @@ class AdminCategoryController extends ApiController
 
         $this->authorize('restore', $category);
 
-        $category = $this->categoryService->restoreCategory($id);
+        $category = $this->categoryService->restore($id);
 
         return $this->success(new CategoryResource($category), 'Category restored successfully');
     }

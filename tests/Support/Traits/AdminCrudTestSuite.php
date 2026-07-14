@@ -55,7 +55,7 @@ trait AdminCrudTestSuite
     public function test_restore(): void
     {
         $model = $this->modelFactory()::factory()->trashed()->create();
-        dump($model->wasChanged('deleted_at'));
+        // dump($model->wasChanged('deleted_at'));
         $this->assertAdminSuccess('PATCH', "{$this->endpoint()}/{$model->id}/restore", [],
             function () use ($model) {
                 $table = app($this->modelFactory())->getTable();
