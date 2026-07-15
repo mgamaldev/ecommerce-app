@@ -7,12 +7,13 @@ use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\Auth\RegisterResource;
 use App\Services\Auth\RegisterService;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\JsonResponse;
 
 class RegisterController extends ApiController
 {
     public function __construct(protected RegisterService $registerService) {}
 
-    public function store(RegisterRequest $request)
+    public function store(RegisterRequest $request): JsonResponse
     {
         $userRegister = $this->registerService->register($request);
 

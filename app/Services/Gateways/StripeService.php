@@ -7,7 +7,7 @@ use App\Models\Order;
 
 class StripeService implements PaymentGatewayInterface
 {
-    public function checkout(Order $order)
+    public function checkout(Order $order): array
     {
         $session = $order->user->checkout([
             'payment_method_types' => ['card'],

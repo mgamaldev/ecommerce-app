@@ -7,14 +7,13 @@ use App\Http\Requests\CartItemRequest;
 use App\Interfaces\PaymentGatewayInterface;
 use App\Models\Order;
 use App\Models\Product;
-use App\Models\Variant;
 use Illuminate\Support\Facades\DB;
 
 class CheckoutService
 {
     public function __construct(public CartItemService $cartItemService, public PaymentGatewayInterface $paymentGateway) {}
 
-    public function checkout(CartItemRequest $request)
+    public function checkout(CartItemRequest $request): array
     {
         $cartItem = $this->cartItemService->userCart($request);
         $user = auth()->user();
@@ -22,8 +21,6 @@ class CheckoutService
         return DB::transaction(function () use ($user, $cartItem) {
 
             $product = Product::with('variants')->lockForUpdate()->first();
-
-            $variant = Variant::where('product_id', $product->id)->first();
 
             $totalPrice = $cartItem->quantity * $product->base_price;
 

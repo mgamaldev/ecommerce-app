@@ -8,12 +8,13 @@ use App\Http\Requests\Admin\ProductUpdateRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Services\Admin\ProductService;
+use Illuminate\Http\JsonResponse;
 
 class AdminProductController extends ApiController
 {
     public function __construct(protected ProductService $productService) {}
 
-    public function index()
+    public function index(): JsonResponse
     {
         $this->authorize('viewAny', Product::class);
 
@@ -22,7 +23,7 @@ class AdminProductController extends ApiController
         return $this->success(ProductResource::collection($products), 'All products');
     }
 
-    public function show(Product $product)
+    public function show(Product $product): JsonResponse
     {
         $this->authorize('view', $product);
 
@@ -31,7 +32,7 @@ class AdminProductController extends ApiController
         return $this->success(new ProductResource($product), 'Product details');
     }
 
-    public function update(ProductUpdateRequest $request, Product $product)
+    public function update(ProductUpdateRequest $request, Product $product): JsonResponse
     {
         $this->authorize('update', $product);
 
@@ -40,7 +41,7 @@ class AdminProductController extends ApiController
         return $this->success(new ProductResource($product), 'Product updated successfully');
     }
 
-    public function store(ProductCreateRequest $request)
+    public function store(ProductCreateRequest $request): JsonResponse
     {
         $this->authorize('create', Product::class);
 
@@ -49,7 +50,7 @@ class AdminProductController extends ApiController
         return $this->success(new ProductResource($product), 'Product added successfully');
     }
 
-    public function destroy(Product $product)
+    public function destroy(Product $product): JsonResponse
     {
         $this->authorize('delete', $product);
 
@@ -58,7 +59,7 @@ class AdminProductController extends ApiController
         return $this->success(new ProductResource($product), 'Product deleted successfully');
     }
 
-    public function forceDelete(int $id)
+    public function forceDelete(int $id): JsonResponse
     {
         $product = Product::withTrashed()->findOrFail($id);
 
@@ -69,7 +70,7 @@ class AdminProductController extends ApiController
         return $this->success(new ProductResource($product), 'Product permanently deleted');
     }
 
-    public function restore(int $id)
+    public function restore(int $id): JsonResponse
     {
         $product = product::withTrashed()->findOrFail($id);
 

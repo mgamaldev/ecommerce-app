@@ -15,10 +15,7 @@ class WelcomeEmail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public $user)
-    {
-        $this->user = $user;
-    }
+    public function __construct(public $user) {}
 
     /**
      * Get the message envelope.

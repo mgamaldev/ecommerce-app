@@ -10,7 +10,7 @@ class CartItemService
 {
     public function __construct(public CartService $cartService) {}
 
-    public function userCart(CartItemRequest $request)
+    public function userCart(CartItemRequest $request): CartItem
     {
         $userCart = $this->cartService->userCart();
 

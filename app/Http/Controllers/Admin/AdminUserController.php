@@ -7,12 +7,13 @@ use App\Http\Requests\Admin\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\Admin\UserService;
+use Illuminate\Http\JsonResponse;
 
 class AdminUserController extends ApiController
 {
     public function __construct(protected UserService $userService) {}
 
-    public function index()
+    public function index(): JsonResponse
     {
         $this->authorize('viewAny', User::class);
 
@@ -21,7 +22,7 @@ class AdminUserController extends ApiController
         return $this->success(UserResource::collection($users), 'All users');
     }
 
-    public function show(User $user)
+    public function show(User $user): JsonResponse
     {
         $this->authorize('view', $user);
 
@@ -30,7 +31,7 @@ class AdminUserController extends ApiController
         return $this->success(new UserResource($user), 'User Details');
     }
 
-    public function update(UserUpdateRequest $request, User $user)
+    public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
         $this->authorize('update', $user);
 

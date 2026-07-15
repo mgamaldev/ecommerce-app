@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisterService
 {
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): User
     {
         $user = User::create([
             'name' => $request->name,

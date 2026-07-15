@@ -8,12 +8,13 @@ use App\Http\Requests\Admin\VariantUpdateRequest;
 use App\Http\Resources\VariantResource;
 use App\Models\Variant;
 use App\Services\Admin\VariantService;
+use Illuminate\Http\JsonResponse;
 
 class AdminVariantController extends ApiController
 {
     public function __construct(protected VariantService $variantService) {}
 
-    public function index()
+    public function index(): JsonResponse
     {
         $this->authorize('viewAny', Variant::class);
 
@@ -22,7 +23,7 @@ class AdminVariantController extends ApiController
         return $this->success(VariantResource::collection($variants), 'All variants');
     }
 
-    public function show(Variant $variant)
+    public function show(Variant $variant): JsonResponse
     {
         $this->authorize('view', $variant);
 
@@ -31,7 +32,7 @@ class AdminVariantController extends ApiController
         return $this->success(new VariantResource($variant), 'Variant details');
     }
 
-    public function update(VariantUpdateRequest $request, Variant $variant)
+    public function update(VariantUpdateRequest $request, Variant $variant): JsonResponse
     {
         $this->authorize('update', $variant);
 
@@ -40,7 +41,7 @@ class AdminVariantController extends ApiController
         return $this->success(new VariantResource($variant), 'variant updated successfully');
     }
 
-    public function store(VariantCreateRequest $request)
+    public function store(VariantCreateRequest $request): JsonResponse
     {
         $this->authorize('create', Variant::class);
 
@@ -49,7 +50,7 @@ class AdminVariantController extends ApiController
         return $this->success(new VariantResource($addVariant), 'Variant added successfully');
     }
 
-    public function destroy(Variant $variant)
+    public function destroy(Variant $variant): JsonResponse
     {
         $this->authorize('delete', $variant);
 
@@ -58,7 +59,7 @@ class AdminVariantController extends ApiController
         return $this->success(new VariantResource($variant), 'variant deleted successfully');
     }
 
-    public function forceDelete(int $id)
+    public function forceDelete(int $id): JsonResponse
     {
         $variant = Variant::withTrashed()->findOrFail($id);
 
@@ -69,7 +70,7 @@ class AdminVariantController extends ApiController
         return $this->success(new VariantResource($variant), 'Variant permanently deleted');
     }
 
-    public function restore(int $id)
+    public function restore(int $id): JsonResponse
     {
         $variant = Variant::withTrashed()->findOrFail($id);
 

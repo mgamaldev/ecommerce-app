@@ -6,6 +6,7 @@ use App\Exceptions\OutOfStockException;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\CartItemRequest;
 use App\Services\CheckoutService;
+use Illuminate\Http\JsonResponse;
 
 class CheckOutController extends ApiController
 {
@@ -14,7 +15,7 @@ class CheckOutController extends ApiController
      */
     public function __construct(protected CheckoutService $checkoutService) {}
 
-    public function store(CartItemRequest $request)
+    public function store(CartItemRequest $request): JsonResponse
     {
         try {
 

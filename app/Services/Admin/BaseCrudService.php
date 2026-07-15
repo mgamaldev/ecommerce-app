@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -14,12 +15,12 @@ abstract class BaseCrudService
         return app($this->getModelClass());
     }
 
-    public function getAll($request = null, int $perPage = 10)
+    public function getAll($request = null, int $perPage = 10): LengthAwarePaginator
     {
         return $this->getModel()->filter($request)->paginate($perPage);
     }
 
-    public function getDetails(int $id): ?Model
+    public function getDetails(int $id): Model
     {
         return $this->getModel()->findOrFail($id);
     }

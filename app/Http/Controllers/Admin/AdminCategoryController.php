@@ -8,12 +8,13 @@ use App\Http\Requests\Admin\CategoryUpdateRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Services\Admin\CategoryService;
+use Illuminate\Http\JsonResponse;
 
 class AdminCategoryController extends ApiController
 {
     public function __construct(protected CategoryService $categoryService) {}
 
-    public function index()
+    public function index(): JsonResponse
     {
         $this->authorize('viewAny', Category::class);
 
@@ -22,7 +23,7 @@ class AdminCategoryController extends ApiController
         return $this->success(CategoryResource::collection($categories), 'All categories');
     }
 
-    public function show(Category $category)
+    public function show(Category $category): JsonResponse
     {
         $this->authorize('view', $category);
 
@@ -31,7 +32,7 @@ class AdminCategoryController extends ApiController
         return $this->success(new CategoryResource($category), 'Category details');
     }
 
-    public function update(CategoryUpdateRequest $request, Category $category)
+    public function update(CategoryUpdateRequest $request, Category $category): JsonResponse
     {
         $this->authorize('update', $category);
 
@@ -40,7 +41,7 @@ class AdminCategoryController extends ApiController
         return $this->success(new CategoryResource($category), 'Category updated successfully');
     }
 
-    public function store(CategoryCreateRequest $request, Category $category)
+    public function store(CategoryCreateRequest $request, Category $category): JsonResponse
     {
         $this->authorize('create', Category::class);
 
@@ -49,7 +50,7 @@ class AdminCategoryController extends ApiController
         return $this->success(new CategoryResource($addCategory), 'Category added successfully');
     }
 
-    public function destroy(Category $category)
+    public function destroy(Category $category): JsonResponse
     {
         $this->authorize('delete', $category);
 
@@ -58,7 +59,7 @@ class AdminCategoryController extends ApiController
         return $this->success(new CategoryResource($category), 'Category deleted successfully');
     }
 
-    public function forceDelete(int $id)
+    public function forceDelete(int $id): JsonResponse
     {
         $category = Category::withTrashed()->findOrFail($id);
 
@@ -69,7 +70,7 @@ class AdminCategoryController extends ApiController
         return $this->success('Category permanently deleted');
     }
 
-    public function restore(int $id)
+    public function restore(int $id): JsonResponse
     {
         $category = Category::withTrashed()->findOrFail($id);
 
