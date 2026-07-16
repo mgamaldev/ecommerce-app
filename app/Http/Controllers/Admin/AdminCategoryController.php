@@ -10,10 +10,20 @@ use App\Models\Category;
 use App\Services\Admin\CategoryService;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Admin Categories
+ *
+ * Endpoints for managing categories. All endpoints in this group are available only to administrators.
+ */
 class AdminCategoryController extends ApiController
 {
     public function __construct(protected CategoryService $categoryService) {}
 
+    /**
+     * List of all categories.
+     *
+     * Retrieve all categories.
+     */
     public function index(): JsonResponse
     {
         $this->authorize('viewAny', Category::class);
@@ -23,6 +33,11 @@ class AdminCategoryController extends ApiController
         return $this->success(CategoryResource::collection($categories), 'All categories');
     }
 
+    /**
+     * Show category details.
+     *
+     * Retrieve the details of a specific category.
+     */
     public function show(Category $category): JsonResponse
     {
         $this->authorize('view', $category);
@@ -32,6 +47,11 @@ class AdminCategoryController extends ApiController
         return $this->success(new CategoryResource($category), 'Category details');
     }
 
+    /**
+     * Update a category.
+     *
+     * Update an existing category.
+     */
     public function update(CategoryUpdateRequest $request, Category $category): JsonResponse
     {
         $this->authorize('update', $category);
@@ -41,6 +61,11 @@ class AdminCategoryController extends ApiController
         return $this->success(new CategoryResource($category), 'Category updated successfully');
     }
 
+    /**
+     * Create a new category.
+     *
+     * Create a new product category.
+     */
     public function store(CategoryCreateRequest $request, Category $category): JsonResponse
     {
         $this->authorize('create', Category::class);
@@ -50,6 +75,11 @@ class AdminCategoryController extends ApiController
         return $this->success(new CategoryResource($addCategory), 'Category added successfully');
     }
 
+    /**
+     * Delete a category.
+     *
+     * Soft delete a category.
+     */
     public function destroy(Category $category): JsonResponse
     {
         $this->authorize('delete', $category);
@@ -59,6 +89,11 @@ class AdminCategoryController extends ApiController
         return $this->success(new CategoryResource($category), 'Category deleted successfully');
     }
 
+    /**
+     * Permanently delete a category.
+     *
+     * Permanently remove a soft-deleted category.
+     */
     public function forceDelete(int $id): JsonResponse
     {
         $category = Category::withTrashed()->findOrFail($id);
@@ -70,6 +105,11 @@ class AdminCategoryController extends ApiController
         return $this->success('Category permanently deleted');
     }
 
+    /**
+     * Restore a category.
+     *
+     * Restore a previously soft-deleted category.
+     */
     public function restore(int $id): JsonResponse
     {
         $category = Category::withTrashed()->findOrFail($id);

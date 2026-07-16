@@ -13,6 +13,11 @@ class RegisterController extends ApiController
 {
     public function __construct(protected RegisterService $registerService) {}
 
+    /**
+     * Register a new user.
+     *
+     * Create a new user account.
+     */
     public function store(RegisterRequest $request): JsonResponse
     {
         $userRegister = $this->registerService->register($request);

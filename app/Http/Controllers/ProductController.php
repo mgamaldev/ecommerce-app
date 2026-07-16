@@ -9,11 +9,13 @@ use Illuminate\Http\JsonResponse;
 
 class ProductController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function __construct(protected ProductService $productService) {}
 
+    /**
+     * List of all products.
+     *
+     * Retrieve all available products.
+     */
     public function index(): JsonResponse
     {
         $products = $this->productService->getAllProducts();
@@ -21,6 +23,11 @@ class ProductController extends ApiController
         return $this->success(ProductResource::collection($products), 'All Products');
     }
 
+    /**
+     * Show product details.
+     *
+     * Retrieve the details of a specific product.
+     */
     public function show(int $id): JsonResponse
     {
         $productDetails = $this->productService->getProductDetails($id);

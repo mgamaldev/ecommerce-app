@@ -9,11 +9,13 @@ use Illuminate\Http\JsonResponse;
 
 class CategoryController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function __construct(protected CategoryService $categoryService) {}
 
+    /**
+     * List of all categories.
+     *
+     * Retrieve all available categories.
+     */
     public function index(): JsonResponse
     {
         $categories = $this->categoryService->getAllCategories();
@@ -21,6 +23,11 @@ class CategoryController extends ApiController
         return $this->success(CategoryResource::collection($categories), 'All Categories');
     }
 
+    /**
+     * Show category details.
+     *
+     * Retrieve the details of a specific category.
+     */
     public function show(int $id): JsonResponse
     {
         $categoryDetails = $this->categoryService->getCategoryDetails($id);

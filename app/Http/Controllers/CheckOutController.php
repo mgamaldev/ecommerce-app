@@ -10,11 +10,13 @@ use Illuminate\Http\JsonResponse;
 
 class CheckOutController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function __construct(protected CheckoutService $checkoutService) {}
 
+    /**
+     * Create a checkout session.
+     *
+     * Create a new checkout session for the authenticated user's cart.
+     */
     public function store(CartItemRequest $request): JsonResponse
     {
         try {

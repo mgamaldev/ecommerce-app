@@ -11,6 +11,11 @@ class CartController extends ApiController
 {
     public function __construct(protected CartService $cartService) {}
 
+    /**
+     * Get user cart.
+     *
+     * Retrieve the authenticated user's shopping cart.
+     */
     public function index(): JsonResponse
     {
         $cartItem = $this->cartService->userCart();

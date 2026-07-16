@@ -11,6 +11,11 @@ class VariantController extends ApiController
 {
     public function __construct(protected VariantService $variantService) {}
 
+    /**
+     * List of all variants.
+     *
+     * Retrieve all available variants.
+     */
     public function index(): JsonResponse
     {
         $variants = $this->variantService->getAllVariant();

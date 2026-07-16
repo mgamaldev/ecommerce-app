@@ -9,10 +9,20 @@ use App\Models\Order;
 use App\Services\Admin\OrderService;
 use Illuminate\Http\JsonResponse;
 
+/**
+ * @group Admin Orders
+ *
+ * Endpoints for managing orders. All endpoints in this group are available only to administrators.
+ */
 class AdminOrderController extends ApiController
 {
     public function __construct(protected OrderService $orderService) {}
 
+    /**
+     * List of all orders.
+     *
+     * Retrieve all orders.
+     */
     public function index(): JsonResponse
     {
         $this->authorize('viewAny', Order::class);
@@ -22,6 +32,11 @@ class AdminOrderController extends ApiController
         return $this->success(OrderResource::collection($orders), 'All orders');
     }
 
+    /**
+     * Show order details.
+     *
+     * Retrieve the details of a specific order.
+     */
     public function show(Order $order): JsonResponse
     {
         $this->authorize('view', $order);
@@ -31,6 +46,11 @@ class AdminOrderController extends ApiController
         return $this->success(new OrderResource($order), 'Order details');
     }
 
+    /**
+     * Update an order.
+     *
+     * Update the status or information of an existing order.
+     */
     public function update(OrderUpdateRequest $request, Order $order): JsonResponse
     {
         $this->authorize('update', $order);
