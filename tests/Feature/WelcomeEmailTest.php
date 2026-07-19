@@ -5,9 +5,9 @@ namespace Tests\Feature;
 use App\Mail\WelcomeEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
-use Tests\TestCase;
+use Tests\Support\ApiBaseTest;
 
-class WelcomeEmailTest extends TestCase
+class WelcomeEmailTest extends ApiBaseTest
 {
     use RefreshDatabase;
 

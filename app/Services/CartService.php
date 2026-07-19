@@ -7,7 +7,7 @@ use Exception;
 
 class CartService
 {
-    public function userCart()
+    public function userCart(): Cart
     {
         $user = auth()->user();
         if (! $user) {

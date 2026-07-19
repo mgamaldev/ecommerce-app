@@ -30,6 +30,7 @@ class CategoryFactory extends Factory
             'created_at' => now(),
 
             'updated_at' => now(),
+
         ];
     }
 }

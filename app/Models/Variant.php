@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Variant extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable =
         [
@@ -19,7 +21,7 @@ class Variant extends Model
             'size',
         ];
 
-    public function products()
+    public function product()
     {
         return $this->belongsTo(Product::class);
     }
@@ -27,6 +29,11 @@ class Variant extends Model
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
+    }
+
+    public function auditLogs(): MorphMany
+    {
+        return $this->morphMany(AuditLogs::class, 'auditable');
     }
 
     public function scopeFilter($query, $request = null)

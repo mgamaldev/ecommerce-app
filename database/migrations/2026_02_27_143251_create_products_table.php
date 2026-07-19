@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->reference('id')->on('category')->onDeleteCascade();
+            $table->foreignId('category_id')->reference('id')->on('categories')->onDeleteCascade();
             $table->string('name');
             $table->string('slug');
             $table->text('description');

@@ -2,39 +2,27 @@
 
 namespace App\Services;
 
-use App\Exceptions\NotEnoughBalanceException;
+use App\Events\OrderPlaced;
 use App\Http\Requests\CartItemRequest;
+use App\Interfaces\PaymentGatewayInterface;
 use App\Models\Order;
 use App\Models\Product;
-use App\Models\Variant;
-use App\Models\Wallet;
 use Illuminate\Support\Facades\DB;
 
 class CheckoutService
 {
-    public function __construct(public CartItemService $cartItemService) {}
+    public function __construct(public CartItemService $cartItemService, public PaymentGatewayInterface $paymentGateway) {}
 
-    public function checkout(CartItemRequest $request)
+    public function checkout(CartItemRequest $request): array
     {
         $cartItem = $this->cartItemService->userCart($request);
         $user = auth()->user();
 
-        DB::transaction(function () use ($user, $cartItem) {
-
-            $wallet = Wallet::where('user_id', $user->id)->lockForUpdate()->first();
+        return DB::transaction(function () use ($user, $cartItem) {
 
             $product = Product::with('variants')->lockForUpdate()->first();
 
-            $variant = Variant::where('product_id', $product->id);
-
             $totalPrice = $cartItem->quantity * $product->base_price;
-
-            if ($wallet?->balance < $totalPrice) {
-                throw new NotEnoughBalanceException;
-            }
-            $wallet->decrement('balance', $totalPrice);
-            $product->decrement('stock', $cartItem->quantity);
-            $variant->decrement('variant_stock', $cartItem->quantity);
 
             $order = Order::create([
                 'user_id' => $user->id,
@@ -43,7 +31,9 @@ class CheckoutService
                 'status' => 'pending',
             ]);
 
-            return $order;
+            event(new OrderPlaced($order));
+
+            return $this->paymentGateway->checkout($order);
         });
     }
 }

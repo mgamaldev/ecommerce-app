@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Support\ApiBaseTest;
 
 class ProductTest extends ApiBaseTest
 {

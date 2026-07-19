@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisterService
 {
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): User
     {
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->email),
+            'password' => Hash::make($request->password),
         ]);
 
         return $user;

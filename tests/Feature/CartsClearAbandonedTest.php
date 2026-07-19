@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Tests\Support\ApiBaseTest;
 
-class CartsClearAbandonedTest extends TestCase
+class CartsClearAbandonedTest extends ApiBaseTest
 {
     use RefreshDatabase;
 

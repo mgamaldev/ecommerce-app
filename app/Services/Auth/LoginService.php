@@ -10,7 +10,7 @@ class LoginService
     /**
      * Create a new class instance.
      */
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): array
     {
         $user = User::where('email', $request->email)->first();
         $token = $user->createToken('loginToken')->plainTextToken;
