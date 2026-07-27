@@ -8,6 +8,8 @@ use App\Interfaces\PaymentGatewayInterface;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
+use App\Exceptions\OutOfStockException;
+
 
 class CheckoutService
 {
@@ -23,6 +25,10 @@ class CheckoutService
             $product = Product::with('variants')->lockForUpdate()->first();
 
             $totalPrice = $cartItem->quantity * $product->base_price;
+
+            if ($product->stock < $cartItem->quantity) {
+                throw new OutOfStockException();
+            }
 
             $order = Order::create([
                 'user_id' => $user->id,
