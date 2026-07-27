@@ -14,7 +14,7 @@ class OutOfStockExceptionTest extends TestCase
 
     public function test_checkout_returns_out_of_stock_exception(): void
     {
-        
+
         $user = User::factory()->create();
 
         $product = Product::factory()->create([

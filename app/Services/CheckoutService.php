@@ -3,13 +3,12 @@
 namespace App\Services;
 
 use App\Events\OrderPlaced;
+use App\Exceptions\OutOfStockException;
 use App\Http\Requests\CartItemRequest;
 use App\Interfaces\PaymentGatewayInterface;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
-use App\Exceptions\OutOfStockException;
-
 
 class CheckoutService
 {
@@ -27,7 +26,7 @@ class CheckoutService
             $totalPrice = $cartItem->quantity * $product->base_price;
 
             if ($product->stock < $cartItem->quantity) {
-                throw new OutOfStockException();
+                throw new OutOfStockException;
             }
 
             $order = Order::create([

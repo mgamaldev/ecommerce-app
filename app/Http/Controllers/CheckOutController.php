@@ -18,8 +18,8 @@ class CheckOutController extends ApiController
      */
     public function store(CartItemRequest $request): JsonResponse
     {
-            $session = $this->checkoutService->checkout($request);
+        $session = $this->checkoutService->checkout($request);
 
-            return $this->success(['checkout_url' => $session['url']], 'Checkout session created');
+        return $this->success(['checkout_url' => $session['url']], 'Checkout session created');
     }
 }
