@@ -36,8 +36,6 @@ class CheckoutService
                 'status' => 'pending',
             ]);
 
-            event(new OrderPlaced($order));
-
             return $this->paymentGateway->checkout($order);
         });
     }

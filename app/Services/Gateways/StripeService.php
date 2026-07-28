@@ -37,6 +37,10 @@ class StripeService implements PaymentGatewayInterface
             'client_reference_id' => $order->id,
         ]);
 
+         $order->update([
+            'stripe_session_id' => $session->id,
+        ]);
+
         return [
             'url' => $session->url,
             'session_id' => $session->id,
