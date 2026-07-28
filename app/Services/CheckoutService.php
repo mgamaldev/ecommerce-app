@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\OrderPlaced;
 use App\Exceptions\OutOfStockException;
 use App\Http\Requests\CartItemRequest;
 use App\Interfaces\PaymentGatewayInterface;
@@ -34,6 +35,8 @@ class CheckoutService
                 'total_amount' => $totalPrice,
                 'status' => 'pending',
             ]);
+
+            event(new OrderPlaced($order));
 
             return $this->paymentGateway->checkout($order);
         });
