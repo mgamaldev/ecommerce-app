@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Events\OrderPlaced;
 use App\Exceptions\OutOfStockException;
 use App\Http\Requests\CartItemRequest;
 use App\Interfaces\PaymentGatewayInterface;

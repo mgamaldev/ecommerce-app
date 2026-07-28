@@ -37,7 +37,7 @@ class HandleStripeWebhook
 
             $order->update(['payment_status' => 'paid']);
 
-            });
             event(new OrderPlaced($order));
+        });
     }
 }
