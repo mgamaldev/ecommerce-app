@@ -19,6 +19,7 @@ class OutOfStockExceptionTest extends TestCase
 
         $unusedProduct = Product::factory()->create([
             'stock' => 100,
+            'base_price' => 100,
         ]);
 
         $product = Product::factory()->create([
@@ -39,9 +40,9 @@ class OutOfStockExceptionTest extends TestCase
         $response->assertStatus(400);
 
         $response->assertJson([
+            'status' => false,
             'message' => 'product is out of stock',
             'errors' => null,
-            'code' => 'OUT_OF_STOCK',
         ]);
     }
 }
