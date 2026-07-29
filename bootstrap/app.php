@@ -35,9 +35,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (ApiBaseException $e) {
             return response()->json(
                 [
+                    'status' => false,
                     'message' => $e->getMessage(),
                     'errors' => null,
-                    'code' => $e->errorCode(),
                 ], $e->status()
             );
 

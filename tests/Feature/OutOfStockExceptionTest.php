@@ -17,6 +17,10 @@ class OutOfStockExceptionTest extends TestCase
 
         $user = User::factory()->create();
 
+        $unusedProduct = Product::factory()->create([
+            'stock' => 100,
+        ]);
+        
         $product = Product::factory()->create([
             'stock' => 0,
             'base_price' => 100,

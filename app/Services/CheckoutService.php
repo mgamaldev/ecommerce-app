@@ -21,7 +21,7 @@ class CheckoutService
 
         return DB::transaction(function () use ($user, $cartItem) {
 
-            $product = Product::with('variants')->lockForUpdate()->first();
+            $product = Product::with('variants')->lockForUpdate()->findOrFail($cartItem->variant->product_id);
 
             $totalPrice = $cartItem->quantity * $product->base_price;
 
