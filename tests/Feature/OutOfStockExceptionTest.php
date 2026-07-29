@@ -20,7 +20,7 @@ class OutOfStockExceptionTest extends TestCase
         $unusedProduct = Product::factory()->create([
             'stock' => 100,
         ]);
-        
+
         $product = Product::factory()->create([
             'stock' => 0,
             'base_price' => 100,
