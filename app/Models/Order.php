@@ -16,6 +16,7 @@ class Order extends Model
         'payment_status',
         'payment_method',
         'transaction_id',
+        'stripe_session_id',
     ];
 
     public function user()

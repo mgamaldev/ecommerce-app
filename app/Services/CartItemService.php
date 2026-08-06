@@ -20,7 +20,7 @@ class CartItemService
             'quantity' => $request->quantity,
         ]);
 
-        $cartItem->load('variant');
+        $cartItem->load('variant.product');
 
         if ($cartItem->quantity > $cartItem->variant->variant_stock) {
             throw new OutOfStockException;

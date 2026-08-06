@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Events\OrderPlaced;
+use App\Exceptions\OutOfStockException;
 use App\Http\Requests\CartItemRequest;
 use App\Interfaces\PaymentGatewayInterface;
 use App\Models\Order;
@@ -20,9 +21,13 @@ class CheckoutService
 
         return DB::transaction(function () use ($user, $cartItem) {
 
-            $product = Product::with('variants')->lockForUpdate()->first();
+            $product = Product::with('variants')->lockForUpdate()->findOrFail($cartItem->variant->product_id);
 
             $totalPrice = $cartItem->quantity * $product->base_price;
+
+            if ($product->stock < $cartItem->quantity) {
+                throw new OutOfStockException;
+            }
 
             $order = Order::create([
                 'user_id' => $user->id,

@@ -2,22 +2,22 @@
 
 namespace App\Exceptions;
 
-class OutOfStockException extends ApiBaseException
+class ValidationException extends ApiBaseException
 {
-    protected $message = 'product is out of stock';
+    protected $message = 'Validation Failed';
 
     public function errorCode(): string
     {
-        return 'OUT_OF_STOCK';
+        return 'VALIDATION_ERROR';
     }
 
     public function status(): int
     {
-        return 400;
+        return 422;
     }
 
     public function logChannel(): string
     {
-        return 'inventory';
+        return 'api';
     }
 }
